@@ -18,4 +18,4 @@ t.Index([]string{"ab", "ac", "ad", "abc"})
 t.Search("ab") // ["ab" "abc"]
 ```
 
-The API documentation is available at [godoc.org](http://godoc.org/github.com/trie).
+The API documentation is available at [godoc.org](http://godoc.org/github.com/alexkappa/trie).
