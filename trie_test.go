@@ -1,11 +1,24 @@
 package trie
 
 import (
+	"fmt"
 	"reflect"
 	"sort"
 	"testing"
 	"unicode/utf8"
 )
+
+func TestIndex(t *testing.T) {
+	trie := New()
+	trie.Index([]string{"ab", "ac", "ad", "abc"})
+	matches := trie.Search("ab")
+	expected := []string{"ab", "abc"}
+	sort.Strings(matches)
+	sort.Strings(expected)
+	if !reflect.DeepEqual(matches, expected) {
+		t.Errorf("expected search results %v expected %v", matches, expected)
+	}
+}
 
 func TestInsert(t *testing.T) {
 	trie := New()
@@ -69,4 +82,20 @@ func TestEnd(t *testing.T) {
 	if utf8.ValidRune(end) {
 		t.Errorf("end variable should not use a valid rune")
 	}
+}
+
+func TestString(t *testing.T) {
+	trie := New()
+	trie.Index([]string{"a", "ab", "abc"})
+	expected := "a\n b\n  c\n"
+	if trie.String() != expected {
+		t.Errorf("unexpected string representation of trie %q expected %q", trie.String(), expected)
+	}
+}
+
+func ExampleNode() {
+	trie := New()
+	trie.Index([]string{"ab", "ac", "ad", "abc"})
+	fmt.Printf("%q", trie.Search("ab"))
+	// Output: ["ab" "abc"]
 }

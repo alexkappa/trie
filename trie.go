@@ -13,6 +13,13 @@ type Node map[rune]Node
 // New allocates a new node.
 func New() Node { return make(Node) }
 
+// Index builds a Trie with the supplied dictionary d.
+func (node Node) Index(d []string) {
+	for _, s := range d {
+		node.Insert(s)
+	}
+}
+
 // Insert adds a new word to the Trie. It iterates over s and creates or appends
 // a new Node for each rune.
 func (node Node) Insert(s string) {
@@ -88,6 +95,8 @@ func (node Node) String() string {
 	return node.print(0)
 }
 
+// Prints each item in the node prefixed with pad spaces. For each nested node
+// print is called recursively with an incremented pad.
 func (node Node) print(pad int) string {
 	if len(node) == 0 {
 		return ""
