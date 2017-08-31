@@ -25,8 +25,8 @@ func TestInsert(t *testing.T) {
 	trie.Insert("ab")
 	trie.Insert("ac")
 	expected := Node{'a': Node{'b': Node{}, 'c': Node{}}}
-	expected['a']['b'].End()
-	expected['a']['c'].End()
+	expected['a']['b'].end()
+	expected['a']['c'].end()
 	if !reflect.DeepEqual(trie, expected) {
 		t.Errorf("unequal trie %q, %q", trie, expected)
 	}
@@ -98,4 +98,16 @@ func ExampleNode() {
 	trie.Index([]string{"ab", "ac", "ad", "abc"})
 	fmt.Printf("%q", trie.Search("ab"))
 	// Output: ["ab" "abc"]
+}
+
+func ExampleString() {
+	trie := New()
+	trie.Index([]string{"ab", "ac", "ad", "abc", "abcd"})
+	fmt.Printf("%s", trie)
+	// Output: a
+	//  b
+	//   c
+	//    d
+	//  c
+	//  d
 }

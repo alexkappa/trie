@@ -2,6 +2,7 @@ package trie
 
 import (
 	"bytes"
+	"sort"
 	"unicode/utf8"
 )
 
@@ -29,7 +30,7 @@ func (node Node) Insert(s string) {
 		}
 		node = node[r]
 	}
-	node.End()
+	node.end()
 }
 
 // Search looks for the string s inside the Trie structure. If s is matched and
@@ -64,7 +65,7 @@ func (node Node) All(p string) (res []string) {
 // End marks the current node as the end of an indexed word. For example when
 // indexing the string "abc", the node pointed by the key 'c' is marked as an
 // end node.
-func (node Node) End() {
+func (node Node) end() {
 	node[end] = nil
 }
 
@@ -82,11 +83,19 @@ type Iter func(r rune, n Node)
 // ForEach wraps the for loop and additionally checks for the end rune and
 // ignores it.
 func (node Node) ForEach(f Iter) {
-	for r, n := range node {
-		if r == end {
+
+	keys := make([]rune, 0, len(node))
+	for key, _ := range node {
+		keys = append(keys, key)
+	}
+
+	sort.Sort(runeSlice(keys))
+
+	for _, key := range keys {
+		if key == end {
 			continue
 		}
-		f(r, n)
+		f(key, node[key])
 	}
 }
 
@@ -114,3 +123,9 @@ func (node Node) print(pad int) string {
 	})
 	return buf.String()
 }
+
+type runeSlice []rune
+
+func (r runeSlice) Len() int           { return len(r) }
+func (r runeSlice) Less(i, j int) bool { return r[i] < r[j] }
+func (r runeSlice) Swap(i, j int)      { r[i], r[j] = r[j], r[i] }
