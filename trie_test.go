@@ -100,7 +100,7 @@ func ExampleNode() {
 	// Output: ["ab" "abc"]
 }
 
-func ExampleString() {
+func ExamplePrint() {
 	trie := New()
 	trie.Index([]string{"ab", "ac", "ad", "abc", "abcd"})
 	fmt.Printf("%s", trie)
